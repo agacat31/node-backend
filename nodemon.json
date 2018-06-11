@@ -1,0 +1,6 @@
+{
+    "env": {
+        "MONGO_MLAB_USER": "aga",
+        "MONGO_MLAB_PW": "agacat31"
+    }
+}

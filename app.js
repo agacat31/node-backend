@@ -2,6 +2,13 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
+mongoose.connect(
+    'mongodb://'+ 
+    process.env.MONGO_MLAB_USER +':'+ 
+    process.env.MONGO_MLAB_PW +'@ds237700.mlab.com:37700/p-project'
+)
 
 // Routes which handle requests
 const productRoutes = require('./api/routes/products');
