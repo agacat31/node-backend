@@ -1,5 +1,6 @@
 {
     "env": {
+        "BASE_URL": "http://localhost:5000/",
         "MONGO_MLAB_USER": "aga",
         "MONGO_MLAB_PW": "agacat31"
     }
