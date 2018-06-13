@@ -73,7 +73,11 @@ router.get('/get/:productId', (req, res, next) => {
             console.log("From Database ", doc);
             if (doc) {
                 res.status(200).json({
-                    product: doc
+                    product: doc,
+                    request: {
+                        type: 'GET',
+                        url: "http://localhost:5000/products/"
+                    }
                 });
             } else {
                 res.status(404).json({
