@@ -21,7 +21,9 @@ exports.user_signup = (req, res, next) => {
                     } else {
                         const user = new User({
                             _id: mongoose.Types.ObjectId(),
+                            name: req.body.name,
                             email: req.body.email,
+                            username: req.body.username,
                             password: hash
                         });
                         user
@@ -66,7 +68,7 @@ exports.user_login = (req, res, next) => {
                         },
                         process.env.JWT_KEY,
                         {
-                            expiresIn: "5h"
+                            expiresIn: "1y"
                         }
                     )
                     return res.status(200).json({
@@ -80,6 +82,85 @@ exports.user_login = (req, res, next) => {
             })
         })
         .catch(err => {
+            res.status(500).json({
+                error: err
+            });
+        });
+}
+
+exports.user_get_all = (req, res, next) => {
+    User.find()
+        // .select("_id name email username")
+        .exec()
+        .then(docs => {
+            const response = {
+                count: docs.length,
+                users: docs.map(doc => {
+                    return {
+                        _id: doc._id,
+                        name: doc.name,
+                        email: doc.email,
+                        username: doc.username,
+                        phone: doc.phone,
+                        country: doc.country,
+                        request: {
+                            type: "GET",
+                            url: "http://localhost:5000/user/get/" + doc._id
+                        }
+                    }
+                })
+            }
+            res.status(200).json(response);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+}
+
+exports.user_get_user = (req, res, next) => {
+    const id = req.params.userId;
+    User.findById(id)
+        .select('-password')
+        .exec()
+        .then(doc => {
+            if (doc) {
+                res.status(200).json({
+                    user: doc,
+                    request: {
+                        type: 'GET',
+                        url: "http://localhost:5000/user/"
+                    }
+                });
+            } else {
+                res.status(404).json({
+                    message: "No valid entry found for provided ID"
+                });
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({error: err});
+        });
+}
+
+exports.user_update_user = (req, res, next) => {
+    const id = req.params.userId;
+    User.update({_id: id}, {$set: req.body})
+        .exec()
+        .then(result => {
+            res.status(200).json({
+                message: "Data updated!",
+                request: {
+                    type: 'GET',
+                    url: "http://localhost:5000/user/get/" + id
+                }
+            });
+        })
+        .catch(err => {
+            console.log(err);
             res.status(500).json({
                 error: err
             });

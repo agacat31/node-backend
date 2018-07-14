@@ -71,7 +71,6 @@ exports.products_get_product = (req, res, next) => {
         .select("name price _id productImage")
         .exec()
         .then(doc => {
-            console.log("From Database ", doc);
             if (doc) {
                 res.status(200).json({
                     product: doc,
@@ -98,6 +97,8 @@ exports.products_update_product = (req, res, next) => {
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
     }
+    console.log(updateOps);
+    console.log(req.body);
     Product.update({_id: id}, {$set: updateOps})
         .exec()
         .then(result => {
