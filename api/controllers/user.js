@@ -24,7 +24,8 @@ exports.user_signup = (req, res, next) => {
                             name: req.body.name,
                             email: req.body.email,
                             username: req.body.username,
-                            password: hash
+                            password: hash,
+                            userImage: req.file.path
                         });
                         user
                             .save()
@@ -35,6 +36,7 @@ exports.user_signup = (req, res, next) => {
                                 });
                             })
                             .catch(err => {
+                                console.log(err)
                                 res.status(500).json({
                                     error: err
                                 });
@@ -103,6 +105,7 @@ exports.user_get_all = (req, res, next) => {
                         username: doc.username,
                         phone: doc.phone,
                         country: doc.country,
+                        userImage: doc.userImage,
                         request: {
                             type: "GET",
                             url: "http://localhost:5000/user/get/" + doc._id
