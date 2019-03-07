@@ -94,9 +94,9 @@ exports.products_get_product = (req, res, next) => {
 exports.products_update_product = (req, res, next) => {
     const id = req.params.productId;
     const updateOps = {};
-    for (const ops of req.body) {
-        updateOps[ops.propName] = ops.value;
-    }
+    Object.keys(req.body).map(key => {
+        updateOps[key] = req.body[key]
+    })
     console.log(updateOps);
     console.log(req.body);
     Product.update({_id: id}, {$set: updateOps})
