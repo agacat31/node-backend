@@ -151,7 +151,7 @@ exports.user_get_user = (req, res, next) => {
 
 exports.user_update_user = (req, res, next) => {
     const id = req.params.userId;
-    User.update({_id: id}, {$set: req.body})
+    User.updateOne({_id: id}, {$set: req.body})
         .exec()
         .then(result => {
             res.status(200).json({
